@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    
+
+    <div id="logger"></div>
+
+    <input id="msg"></input>
+    <button onclick="send()">Send</button>
+   
+    <select  id="users" onchange="val()">
+        <option value="nat" selected="selected">Nat</option>
+        <option value="pat">PAT</option>
+
+      </select>
+
+    <script>
+         
+        var usr = "nat"
+        function val() 
+        {
+              usr = document.getElementById("users").value
+              console.log(document.getElementById("users").value);
+        }
+
+       
+
+        const url = 'ws://localhost:8000/ws/chat/pat/nat/';
+        const ws = new WebSocket(url)
+
+        ws.onopen = (e) => {
+            console.log("connection is open");
+           // ws.send("hello")
+
+
+        }
+
+        ws.onmessage = (e) => {
+
+            console.log(e);
+            console.log(e.data);
+            console.log("msg recieved ");
+
+            const log = document.getElementById("logger")
+
+            log.append(e.data)
+            
+
+            
+
+
+
+        }
+
+
+
+        ws.onclose = (e) => { console.log("connection is closed"); }
+
+        ws.onerror = (e) => { console.log("error"); }
+
+        function send(){
+            console.log("hit", document.getElementById("msg").value);
+            ws.send(document.getElementById("msg").value)
+            document.getElementById("msg").value = ''
+        }
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
